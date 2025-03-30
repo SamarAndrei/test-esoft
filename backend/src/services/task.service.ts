@@ -1,7 +1,9 @@
+import {v7} from "uuid";
 import TaskModel from "../reposio/task.dal";
 import {INewTaskData} from "../interfaces/INewTaskData";
 import {UserRole} from "../interfaces/UserRole";
 import {TaskStatus} from "../interfaces/TaskStatus";
+
 
 class TaskService {
 
@@ -12,7 +14,7 @@ class TaskService {
     }
 
     async createTask(taskData: INewTaskData) {
-        return await this.taskModel.create(taskData);
+        return await this.taskModel.create({id: v7(), ...taskData});
     }
 
     async getTaskById(task_id: string) {

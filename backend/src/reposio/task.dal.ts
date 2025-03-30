@@ -1,13 +1,13 @@
 import db from "../db";
 import {ApiError} from "../exceptions/api_errors";
-import {INewTaskData} from "../interfaces/INewTaskData";
 import {TaskStatus} from "../interfaces/TaskStatus";
+import {ICreateTaskData} from "../interfaces/ICreateTaskData";
 
 class TaskModel {
-    async create(taskData: INewTaskData) {
+    async create(taskData: ICreateTaskData) {
         try {
             const query = db('tasks');
-            await query.insert(taskData);
+            return await query.insert(taskData);
         } catch (err) {
             console.error('Error creating task', err);
             throw err;

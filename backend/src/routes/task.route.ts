@@ -12,6 +12,7 @@ const taskValidation: ValidationChain[] = [
         .optional()
         .isLength({ max: 1000 }).withMessage('Описание задачи не должно превышать 1000 символов'),
     body('dueDate')
+        .optional()
         .isISO8601().withMessage('Дата окончания должна быть в формате ISO 8601')
         .toDate(),
     body('priority')

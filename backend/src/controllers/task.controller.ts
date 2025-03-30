@@ -67,7 +67,7 @@ class TaskController {
     updateTask = async (req: any, res: Response, next: NextFunction) => {
         try {
             const task_id = req.params.task_id;
-            const task = await this.taskService.updateTask(task_id, req.body);
+            const task = await this.taskService.updateTask(task_id, req.body.status);
 
             if (task) {
                 res.status(200).json(task);
