@@ -21,9 +21,9 @@ class TaskController {
                 );
             }
 
-            const newTask = await this.taskService.createTask({...req.body, creatorId: req.user.id});
+            await this.taskService.createTask({...req.body, creatorId: req.user.id});
 
-            res.status(200).json(newTask);
+            res.status(200).json("Задача создана");
         } catch (e) {
             next(e);
         }

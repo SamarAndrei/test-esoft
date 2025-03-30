@@ -1,10 +1,10 @@
-import React from 'react';
+import AuthForm from "../components/AuthForm.tsx";
 
-const AuthorizationPage = () => {
+const AuthorizationPage: React.FC = () => {
     return (
-        <div>
-            
-        </div>
+        <>
+            <AuthForm />
+        </>
     );
 };
 

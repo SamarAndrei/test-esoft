@@ -42,12 +42,14 @@ class UserService {
             await this.userModel.create(newUserData);
 
             const user = await this.userModel.getByLogin(userData.login);
-
-            return this.tokenService.generateToken({
+            const role = user.role;
+            const accessToken = this.tokenService.generateToken({
                 id: user.id,
                 firstName: user.firstName,
-                role: user.role,
-            });
+                role: user.role
+            }
+            )
+            return{accessToken, role};
         }
     }
 
@@ -55,11 +57,14 @@ class UserService {
         const user = await this.userModel.getByLogin(userData.login);
 
         if (user && (await bcrypt.compare(userData.password, user.password))) {
-            return this.tokenService.generateToken({
-                id: user.id,
-                firstName: user.firstName,
-                role: user.role,
-            });
+             const accessToken = this.tokenService.generateToken({
+                 id: user.id,
+                 firstName: user.firstName,
+                 role: user.role,
+             });
+             const role = user.role;
+
+             return {accessToken, role}
         } else {
             throw ApiError.BadRequest('Неверный пароль или email');
         }

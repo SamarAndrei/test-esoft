@@ -7,7 +7,7 @@ class TaskModel {
     async create(taskData: ICreateTaskData) {
         try {
             const query = db('tasks');
-            return await query.insert(taskData);
+            await query.insert(taskData);
         } catch (err) {
             console.error('Error creating task', err);
             throw err;

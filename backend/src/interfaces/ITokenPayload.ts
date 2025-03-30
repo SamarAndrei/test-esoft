@@ -1,5 +1,5 @@
 export interface ITokenPayload {
-    id: string;
+    id: string; // uuid
     firstName: string;
     role: string;
 }

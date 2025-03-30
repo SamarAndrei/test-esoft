@@ -40,16 +40,16 @@ class UserController {
 
     login = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const accessToken = await this.userService.login(req.body);
+            const loginResponse = await this.userService.login(req.body);
             //Токен дейсвителен 30 минут
-            res.cookie('accessToken', accessToken, {
+            res.cookie('accessToken', loginResponse.accessToken, {
                 maxAge: 30 * 60 * 1000,
                 httpOnly: true,
                 secure: true,
                 sameSite: 'none',
             });
 
-            res.status(200).json(accessToken);
+            res.status(200).json(loginResponse);
         } catch (e) {
             next(e);
         }

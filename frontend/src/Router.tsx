@@ -1,19 +1,17 @@
 import React, { Suspense } from 'react';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
-import Layout from "./components/Layout/Layout.tsx";
-import MainPage from "./Pages/MainPage/MainPage.tsx";
+import Layout from "./components/Layout.tsx";
+import AuthorizationPage from "./pages/AuthorizationPage.tsx";
+import Spinner from "./components/Spinner.tsx";
 
-const LazyNoMatchPage = React.lazy(() => import('./Pages/NoMatchPage/NoMatchPage.tsx'));
-const LazyCartPage = React.lazy(() => import('./Pages/Cart/MyCart.tsx'));
-const LazyFavouritesPage = React.lazy(() => import('./Pages/Favorites/MyFavourites.tsx'));
-const LazyOneItemPage = React.lazy(() => import('./Pages/OneItemPage/OneItemPage.tsx'));
+const LazyNoMatchPage = React.lazy(() => import('./pages/NoMatchPage.tsx'));
+const LazyTasksPage = React.lazy(() => import('./pages/TasksPage.tsx'));
+
 
 const routes = [
-    { path: '', element: <MainPage /> },
+    { path: '', element: <AuthorizationPage /> },
     { path: '*', element: <LazyNoMatchPage /> },
-    { path: 'cart', element: <LazyCartPage /> },
-    { path: 'favourite', element: <LazyFavouritesPage /> },
-    { path: 'item/:itemId', element: <LazyOneItemPage /> },
+    { path: 'tasks', element: <LazyTasksPage /> },
 ];
 
 export const Router = () => (
@@ -25,7 +23,7 @@ export const Router = () => (
                         key={index}
                         path={route.path}
                         element={
-                            <Suspense fallback={<CustomSpinner />}>
+                            <Suspense fallback={<Spinner  />}>
                                 {route.element}
                             </Suspense>
                         }
