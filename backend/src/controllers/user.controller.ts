@@ -1,7 +1,6 @@
 import {Request, Response, NextFunction, response} from 'express';
 import UserService from '../services/user.service';
 import {ApiError} from '../exceptions/api_errors';
-// import {IUser} from "../interfaces/IUser";
 import {validationResult} from "express-validator";
 
 class UserController {
@@ -17,7 +16,6 @@ class UserController {
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
                 const errorMessages = errors.array().map(error => error.msg);
-
                 return next(
                     ApiError.BadRequest('Ошибка при валидации', errorMessages),
                 );

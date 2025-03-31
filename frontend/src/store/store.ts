@@ -42,5 +42,5 @@ const store = configureStore({
 export const persistor = persistStore(store);
 export default store;
 
-export type RootState = ReturnType<typeof store.getState>;  // Тип для состояния Redux
+export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

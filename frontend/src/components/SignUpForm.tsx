@@ -21,7 +21,7 @@ const SignUpForm: React.FC = () => {
 
     const handleSignUp = async () => {
         try {
-            await dispatch(registration({ login: userLogin, password: password })).unwrap();
+            await dispatch(registration({firstName, lastName, login: userLogin, password, middleName})).unwrap();
             navigate("/tasks");
         } catch (error) {
             setError(error);
@@ -29,7 +29,7 @@ const SignUpForm: React.FC = () => {
     };
 
     return (
-        <Container maxWidth="xs" sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+        <Container maxWidth="xs" sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
             <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
                 <Typography variant="h5">Регистрация</Typography>
                 {error && <Alert severity="error" sx={{ width: "100%", mt: 2 }}>{error}</Alert>}

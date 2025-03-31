@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import useCheckAuth from "../hooks/useCheckAuth.ts";
 import CreateTaskButton from "./CreateTaskButton.tsx";
+import LogoutButton from "./LogoutButton.tsx";
 
 const Header = React.memo(() => {
     const store = useCheckAuth();
@@ -29,6 +30,7 @@ const Header = React.memo(() => {
                             ) : (
                                 <Typography>wait a second</Typography>
                             )}
+                            {store!.isAuth && <LogoutButton />}
                         </Toolbar>
                     </Container>
                 </AppBar>

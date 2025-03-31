@@ -13,16 +13,16 @@ const TasksGrid = () => {
     const [grouping, setGrouping] = useState("");
     const [tasks, setTasks] = useState<ITask[]>([]);
     const [users, setUsers] = useState<{ [id: string]: { firstName: string, lastName: string } }>({});
-    const [openModal, setOpenModal] = useState(false);
+    const [open, setOpenModal] = useState(false);
     const [searchParams, setSearchParams] = useSearchParams();
     const [selectedTask, setSelectedTask] = useState<ITask | null>(null);
 
-    const handleOpenModal = (task: ITask) => {
+    const handleOpen = (task: ITask) => {
         setSelectedTask(task);
         setOpenModal(true);
     };
 
-    const handleCloseModal = () => {
+    const handleClose = () => {
         setOpenModal(false);
         setSelectedTask(null);
     };
@@ -84,7 +84,7 @@ const TasksGrid = () => {
             <Grid container spacing={1} sx={{ mt: 4 }}>
                 {tasks.length > 0
                     ? tasks.map((task: ITask) => (
-                        <Grid item xs={12} sm={6} md={4} key={task.id} onClick={() => handleOpenModal(task)}>
+                        <Grid item xs={12} sm={6} md={4} key={task.id} onClick={() => handleOpen(task)}>
                             <Paper elevation={3} style={{ padding: 16, cursor: 'pointer' }}>
                                 <Typography variant="h6" style={{ color: getStatusColor(task.status, task.due_date) }}>
                                     {task.title}
@@ -99,12 +99,12 @@ const TasksGrid = () => {
                         </Grid>
                     ))
                     : <Typography> У вас нет задач </Typography>}
-                <TaskModal
-                    openModal={openModal}
-                    handleCloseModal={handleCloseModal}
-                    selectedTask={selectedTask}
-                    users={users}
-                />
+                {/*<TaskModal*/}
+                {/*    open={open}*/}
+                {/*    handleClose={handleClose}*/}
+                {/*    editingTask={selectedTask}*/}
+                {/*    users={users}*/}
+                {/*/>*/}
             </Grid>
         </Container>
     );

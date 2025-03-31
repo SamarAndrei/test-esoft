@@ -10,7 +10,7 @@ const AuthForm: React.FC = () => {
     return (
         <Box display="flex" flexDirection="column" alignItems="center">
             {isLogin ? <LoginForm /> : <SignUpForm />}
-            <Box display="flex" justifyContent="center" mt={2}>
+            <Box display="flex" justifyContent="center" sx={{mt: 2}}>
                 <Button onClick={() => setIsLogin(prev => !prev)}>
                     {isLogin ? "Регистрация" : "Уже есть аккаунт"}
                 </Button>

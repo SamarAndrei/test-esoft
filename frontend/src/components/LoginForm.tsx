@@ -29,7 +29,7 @@ const LoginForm: React.FC = () => {
     };
 
     return (
-        <Container maxWidth="xs" sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+        <Container maxWidth="xs" sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
             <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
                 <Typography variant="h5">Вход</Typography>
                 {error && <Alert severity="error" sx={{ width: "100%", mt: 2 }}>{error}</Alert>}
