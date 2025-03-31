@@ -1,21 +1,26 @@
 import $api from '../http';
 import { AxiosResponse } from 'axios';
 import {ITask} from "../models/ITask.ts";
+import {TSortParam} from "../models/TSortParam.ts";
 
 export default class TasksService {
     static async createTask(
-        title: string,
-        priority: string,
-        status: string,
-        assigneeId: string,
-        description?: string,
+        taskData: {
+            title: string;
+            priority: string;
+            due_date: string;
+            status: string;
+            assigneeId: string;
+            description?: string;
+        }
     ): Promise<AxiosResponse> {
         return $api.post(`/task`, {
-            title,
-            description,
-            priority,
-            status,
-            assigneeId,
+            title: taskData.title,
+            description: taskData.description,
+            priority: taskData.priority,
+            due_date: taskData.due_date,
+            status: taskData.status,
+            assigneeId: taskData.assigneeId,
         });
     }
 
@@ -26,8 +31,8 @@ export default class TasksService {
         return $api.post(`/task/${task_id}`, {status});
     }
 
-    static async getAllTask(): Promise<AxiosResponse<ITask[]>> {
-        return $api.get<ITask[]>(`/task`);
+    static async getAllTask(q: TSortParam): Promise<AxiosResponse<ITask[]>> {
+        return $api.get<ITask[]>(`/task?sort=${q}`);
     }
 
     static async getTask(

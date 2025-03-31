@@ -80,6 +80,23 @@ class UserController {
         }
     };
 
+    getUserById = async (req: any, res: Response, next: NextFunction) => {
+        try {
+            const user_id = req.params.id;
+            const user = await this.userService.getUserById(user_id);
+
+            if (user) {
+                res.status(200).json(user);
+            } else {
+                return next(
+                    ApiError.NotFound('Пользователь не найден')
+                );
+            }
+        } catch (e) {
+            next(e);
+        }
+    };
+
     checkAuth = async (req: any, res: Response, next: NextFunction) => {
         try {
             res.status(200).json({validToken: true})

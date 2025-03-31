@@ -3,6 +3,7 @@ import TaskModel from "../reposio/task.dal";
 import {INewTaskData} from "../interfaces/INewTaskData";
 import {UserRole} from "../interfaces/UserRole";
 import {TaskStatus} from "../interfaces/TaskStatus";
+import {TSortParam} from "../interfaces/TSortParams";
 
 
 class TaskService {
@@ -21,11 +22,11 @@ class TaskService {
         return await this.taskModel.getById(task_id);
     }
 
-    async getAllTasks(user_id: string, user_role: UserRole) {
+    async getAllTasks(user_id: string, user_role: UserRole, sortParam?: TSortParam) {
         if (user_role === UserRole.LEADER) {
-            return await this.taskModel.getAll();
+            return await this.taskModel.getAll(sortParam);
         } else {
-            return await this.taskModel.getAllByUserId(user_id);
+            return await this.taskModel.getAllByUserId(user_id, sortParam);
         }
     }
 

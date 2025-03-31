@@ -2,6 +2,7 @@ import db from "../db";
 import {ApiError} from "../exceptions/api_errors";
 import {TaskStatus} from "../interfaces/TaskStatus";
 import {ICreateTaskData} from "../interfaces/ICreateTaskData";
+import {TSortParam} from "../interfaces/TSortParams";
 
 class TaskModel {
     async create(taskData: ICreateTaskData) {
@@ -26,9 +27,32 @@ class TaskModel {
         }
     }
 
-    async getAll() {
+    async getAll(sortParam?: TSortParam) {
         try {
-            const query = db('tasks');
+            const query = db('tasks').orderBy('updatedAt', 'desc');
+            if (sortParam === 'today') {
+                const today = new Date().toISOString().split('T')[0];
+                return await query.whereRaw('DATE(due_date) = ?', [today]);
+            }
+
+            if (sortParam === 'week') {
+                const startOfWeek = new Date();
+                startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
+                const endOfWeek = new Date();
+                endOfWeek.setDate(endOfWeek.getDate() + (6 - endOfWeek.getDay()));
+
+                return await query.whereBetween('due_date', [startOfWeek.toISOString(), endOfWeek.toISOString()]);
+            }
+
+            if (sortParam === 'future') {
+                const today = new Date().toISOString();
+                return await query.where('due_date', '>', today);
+            }
+
+            if (sortParam === 'assignee') {
+                return await query.orderBy('assigneeId', 'asc');
+            }
+
             return await query.select();
         } catch (err) {
             console.error('Error fetching all tasks', err);
@@ -38,10 +62,31 @@ class TaskModel {
         }
     }
 
-    async getAllByUserId(user_id: string) {
+    async getAllByUserId(user_id: string, sortParam?: TSortParam) {
         try {
-            const query = db('tasks');
-            return await query.where('assigneeId', user_id);
+            const query = db('tasks').where('assigneeId', user_id).orderBy('updatedAt', 'desc');
+
+            if (sortParam === 'today') {
+                const today = new Date().toISOString().split('T')[0];
+                return await query.whereRaw('DATE(due_date) = ?', [today]);
+            }
+
+            if (sortParam === 'week') {
+                const startOfWeek = new Date();
+                startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
+                const endOfWeek = new Date();
+                endOfWeek.setDate(endOfWeek.getDate() + (6 - endOfWeek.getDay()));
+
+                return await query.whereBetween('due_date', [startOfWeek.toISOString(), endOfWeek.toISOString()]);
+            }
+
+            if (sortParam === 'future') {
+                const today = new Date().toISOString();
+                return await query.where('due_date', '>', today);
+            }
+
+            return await query.select();
+
         } catch (err) {
             console.error('Error fetching all tasks', err);
             const errorArray: string[] = [err instanceof Error ? err.message : String(err)];
@@ -65,14 +110,7 @@ class TaskModel {
     async update(task_id: string, status: TaskStatus) {
         try {
             const query = db('tasks');
-            const task = await query.where('id', task_id).first();
-            const updates: Partial<{ status: TaskStatus; dueDate?: Date }> = { status };
-
-            if (status === TaskStatus.COMPLETED && !task.dueDate) {
-                updates.dueDate = new Date();
-            }
-
-            return await query.where('id', task_id).update(updates);
+            return await query.where('id', task_id).update(status);
         } catch (err) {
             console.error('Error updating task', err);
             const errorArray: string[] = [err instanceof Error ? err.message : String(err)];

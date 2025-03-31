@@ -2,7 +2,7 @@ export interface ITask {
     id: string; // uuid
     title: string;
     description?: string;
-    dueDate?: string;
+    due_date: string;
     createdAt: string;
     updatedAt: string;
     priority: 'высокий' | 'средний' | 'низкий';

@@ -37,6 +37,18 @@ class UserModel {
         }
     }
 
+    async getById(id: string) {
+        try {
+            const query = db('users');
+            return await query.where('id', id).first();
+        } catch (err) {
+            console.error('Error fetching user', err);
+            const errorArray: string[] = [err instanceof Error ? err.message : String(err)];
+
+            ApiError.BadConnectToDB(errorArray);
+        }
+    }
+
 }
 
 export default UserModel;

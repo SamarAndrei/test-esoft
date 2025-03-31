@@ -5,19 +5,19 @@ import { useNavigate } from "react-router-dom";
 import { AppDispatch, RootState } from "../store/store.ts";
 
 const useCheckAuth = () => {
-    const { isAuth, isLoading, validToken } = useSelector((state: RootState) => state.user);
+    const store = useSelector((state: RootState) => state.user);
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (validToken){
-            dispatch(checkAuth()).unwrap();
+        if (store!.validToken){
+            dispatch(checkAuth());
         } else {
             navigate('/');
         }
-    }, [dispatch, isAuth, isLoading, validToken]);
+    }, []);
 
-    return { isAuth, isLoading };
+    return store;
 };
 
 export default useCheckAuth;

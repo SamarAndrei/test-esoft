@@ -7,7 +7,7 @@ export async function up(knex: Knex): Promise<void> {
             table.uuid('id').primary();
             table.string('title').notNullable();
             table.text('description');
-            table.timestamp('dueDate');
+            table.timestamp('due_date').notNullable();
             table.timestamp('createdAt').defaultTo(knex.fn.now());
             table.timestamp('updatedAt').defaultTo(knex.fn.now());
             table.enu('priority', ['высокий', 'средний', 'низкий']).notNullable();

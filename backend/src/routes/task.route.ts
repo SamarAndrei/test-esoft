@@ -11,10 +11,17 @@ const taskValidation: ValidationChain[] = [
     body('description')
         .optional()
         .isLength({ max: 1000 }).withMessage('Описание задачи не должно превышать 1000 символов'),
-    body('dueDate')
-        .optional()
+    body('due_date')
         .isISO8601().withMessage('Дата окончания должна быть в формате ISO 8601')
-        .toDate(),
+        .toDate()
+        .custom((value) => {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            if (value < today) {
+                throw new Error('Дата окончания не может быть меньше сегодняшней');
+            }
+            return true;
+        }),
     body('priority')
         .isIn(['высокий', 'средний', 'низкий']).withMessage('Приоритет должен быть одним из: высокий, средний, низкий'),
     body('status')

@@ -2,6 +2,7 @@ import {validationResult} from "express-validator";
 import {NextFunction, Response} from "express";
 import TaskService from "../services/task.service";
 import {ApiError} from "../exceptions/api_errors";
+import {TSortParam} from "../interfaces/TSortParams";
 
 class TaskController {
 
@@ -48,9 +49,11 @@ class TaskController {
 
     getAllTasks = async (req: any, res: Response, next: NextFunction) => {
         try {
+            const sortParam: TSortParam = req.query.sort;
+
             const user_id = req.user.id;
             const user_role = req.user.role;
-            const tasks = await this.taskService.getAllTasks(user_id, user_role);
+            const tasks = await this.taskService.getAllTasks(user_id, user_role, sortParam);
 
             if (tasks) {
                 res.status(200).json(tasks);

@@ -6,7 +6,7 @@ require('dotenv').config();
 
 export const authorizeRole = (roles: string[]) => {
     return (req: any, res: any, next: any) => {
-        const token = req.headers.authorization?.split(' ')[1];
+        const token = req.cookies.accessToken
 
         if (!token) {
             return next(ApiError.UnauthorizedError());

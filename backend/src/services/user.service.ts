@@ -73,5 +73,9 @@ class UserService {
     async getAllUsers() {
         return await this.userModel.getAll();
     }
+
+    async getUserById(id: string) {
+        return await this.userModel.getById(id);
+    }
 }
 export default UserService;
