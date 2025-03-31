@@ -2,6 +2,7 @@ import express from 'express';
 import {body} from "express-validator";
 import UserController from 'controllers/user.controller';
 import {authorizeRole} from "../middleware/role.middleware";
+import {authenticateJWT} from "../middleware/auth.middleware";
 
 export default (userController: UserController) => {
     const router = express.Router();
@@ -23,6 +24,7 @@ export default (userController: UserController) => {
     router.post('/login', userController.login);
     router.post('/logout', userController.logout);
     router.get('/user', authorizeRole(['Руководитель']), userController.getAllUsers);
+    router.get('/checkAuth', authenticateJWT, userController.checkAuth);
 
     return router;
 };

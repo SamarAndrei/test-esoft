@@ -1,21 +1,23 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { checkAuth } from '../store/userSlice';
-import Cookies from "js-cookie";
 import { useEffect } from 'react';
-import {AppDispatch, RootState} from "../store/store.ts";
-
+import { useNavigate } from "react-router-dom";
+import { AppDispatch, RootState } from "../store/store.ts";
 
 const useCheckAuth = () => {
-    const store = useSelector((state: RootState) => state.user);
+    const { isAuth, isLoading, validToken } = useSelector((state: RootState) => state.user);
     const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
 
     useEffect(() => {
-        if (Cookies.get('accessToken')) {
-            dispatch(checkAuth());
+        if (validToken){
+            dispatch(checkAuth()).unwrap();
+        } else {
+            navigate('/');
         }
-    }, [dispatch, store!.isAuth]);
+    }, [dispatch, isAuth, isLoading, validToken]);
 
-    return store;
+    return { isAuth, isLoading };
 };
 
 export default useCheckAuth;

@@ -8,9 +8,10 @@ import {
     Typography,
     Link,
 } from '@mui/material';
+import useCheckAuth from "../hooks/useCheckAuth.ts";
 
 const Header = React.memo(() => {
-    // const store = useCheckAuth();
+    const store = useCheckAuth();
 
     const [open, setOpen] = React.useState(false);
 

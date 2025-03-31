@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import {Request, Response, NextFunction, response} from 'express';
 import UserService from '../services/user.service';
 import {ApiError} from '../exceptions/api_errors';
 // import {IUser} from "../interfaces/IUser";
@@ -23,16 +23,16 @@ class UserController {
                 );
             }
 
-            const accessToken = await this.userService.registration(req.body);
+            const registrationResponse = await this.userService.registration(req.body);
             //Токен дейсвителен 30 минут
-            res.cookie('accessToken', accessToken, {
+            res.cookie('accessToken', registrationResponse.accessToken, {
                 maxAge: 30 * 60 * 1000,
                 httpOnly: true,
                 secure: true,
                 sameSite: 'none',
             });
 
-            res.status(200).json(accessToken);
+            res.status(200).json({...registrationResponse, validToken: true});
         } catch (e) {
             next(e);
         }
@@ -49,7 +49,7 @@ class UserController {
                 sameSite: 'none',
             });
 
-            res.status(200).json(loginResponse);
+            res.status(200).json({...loginResponse, validToken: true});
         } catch (e) {
             next(e);
         }
@@ -75,6 +75,14 @@ class UserController {
                     ApiError.NotFound('Пользователи не найдены')
                 );
             }
+        } catch (e) {
+            next(e);
+        }
+    };
+
+    checkAuth = async (req: any, res: Response, next: NextFunction) => {
+        try {
+            res.status(200).json({validToken: true})
         } catch (e) {
             next(e);
         }
