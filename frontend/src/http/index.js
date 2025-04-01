@@ -1,5 +1,5 @@
 import axios from 'axios';
-export const API_URL = `https://test-esoft-nd13.onrender.com`;
+export const API_URL = `https://test-esoft-nd13.onrender.com/api`;
 const $api = axios.create({
     withCredentials: true,
     baseURL: API_URL,
