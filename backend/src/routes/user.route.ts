@@ -23,7 +23,7 @@ export default (userController: UserController) => {
     );
     router.post('/login', userController.login);
     router.post('/logout', userController.logout);
-    router.get('/user', authorizeRole(['Руководитель']), userController.getAllUsers);
+    router.get('/user', authenticateJWT, userController.getAllUsers);
     router.get('/user/:id', authenticateJWT, userController.getUserById);
     router.get('/checkAuth', authenticateJWT, userController.checkAuth);
 

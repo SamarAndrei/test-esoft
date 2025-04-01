@@ -49,8 +49,7 @@ class TaskController {
 
     getAllTasks = async (req: any, res: Response, next: NextFunction) => {
         try {
-            const sortParam: TSortParam = req.query.sort;
-
+            const sortParam: TSortParam = req.query.sort.split('=')[1];
             const user_id = req.user.id;
             const user_role = req.user.role;
             const tasks = await this.taskService.getAllTasks(user_id, user_role, sortParam);
@@ -70,7 +69,7 @@ class TaskController {
     updateTask = async (req: any, res: Response, next: NextFunction) => {
         try {
             const task_id = req.params.task_id;
-            const task = await this.taskService.updateTask(task_id, req.body.status);
+            const task = await this.taskService.updateTask(task_id, req.body);
 
             if (task) {
                 res.status(200).json(task);

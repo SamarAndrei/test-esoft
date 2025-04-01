@@ -2,8 +2,8 @@ import {v7} from "uuid";
 import TaskModel from "../reposio/task.dal";
 import {INewTaskData} from "../interfaces/INewTaskData";
 import {UserRole} from "../interfaces/UserRole";
-import {TaskStatus} from "../interfaces/TaskStatus";
 import {TSortParam} from "../interfaces/TSortParams";
+import {ICreateTaskData} from "../interfaces/ICreateTaskData";
 
 
 class TaskService {
@@ -30,8 +30,8 @@ class TaskService {
         }
     }
 
-    async updateTask(task_id: string, status: TaskStatus) {
-        return await this.taskModel.update(task_id, status);
+    async updateTask(task_id: string, updatedData: ICreateTaskData) {
+        return await this.taskModel.update(task_id, updatedData);
     }
 
     async deleteTask(task_id: string) {

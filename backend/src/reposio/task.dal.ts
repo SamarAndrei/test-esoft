@@ -1,6 +1,5 @@
 import db from "../db";
 import {ApiError} from "../exceptions/api_errors";
-import {TaskStatus} from "../interfaces/TaskStatus";
 import {ICreateTaskData} from "../interfaces/ICreateTaskData";
 import {TSortParam} from "../interfaces/TSortParams";
 
@@ -107,10 +106,10 @@ class TaskModel {
         }
     }
 
-    async update(task_id: string, status: TaskStatus) {
+    async update(task_id: string, updatedData: ICreateTaskData) {
         try {
             const query = db('tasks');
-            return await query.where('id', task_id).update(status);
+            return await query.where('id', task_id).update(updatedData);
         } catch (err) {
             console.error('Error updating task', err);
             const errorArray: string[] = [err instanceof Error ? err.message : String(err)];
