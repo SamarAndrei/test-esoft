@@ -14,6 +14,16 @@ function seed(knex) {
     return __awaiter(this, void 0, void 0, function* () {
         // Deletes ALL existing entries
         // await knex("users").del();
+        const existingUsers = yield knex("users")
+            .whereIn("id", [
+            "1a1c4c0b-4d43-7f5d-a7ff-3453a5d1be3a",
+            "2a1c4c0b-4d43-7f5d-a7ff-3453a5d1be3a",
+            "3a1c4c0b-4d43-7f5d-a7ff-3453a5d1be3a"
+        ]);
+        if (existingUsers.length > 0) {
+            console.log("Users already exist, skipping seed...");
+            return;
+        }
         // Inserts seed entries
         yield knex("users").insert([
             {
