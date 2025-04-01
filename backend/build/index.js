@@ -20,7 +20,7 @@ const app = (0, express_1.default)();
 const port = Number(process.env.API_PORT) || 3000;
 app.use((0, cors_1.default)({
     credentials: true,
-    origin: process.env.CLIENT_URL,
+    origin: 'https://test-esoft-front.onrender.com/',
 }));
 app.use((0, cookie_parser_1.default)());
 app.use(express_1.default.json());
