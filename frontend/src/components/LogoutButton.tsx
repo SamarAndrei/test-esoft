@@ -14,7 +14,7 @@ const LogoutButton = () => {
 
     return (
         <Box mr={1}>
-            <Button variant="contained" color="secondary" onClick={handleLogout}>
+            <Button variant="contained" color="secondary" onClick={handleLogout} sx={{ backgroundColor: '#97C2EC' }}>
                 Выйти
             </Button>
         </Box>

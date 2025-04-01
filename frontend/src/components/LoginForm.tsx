@@ -51,7 +51,7 @@ const LoginForm: React.FC = () => {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
-                    <Button fullWidth variant="contained" color="primary" sx={{ mt: 2 }} onClick={handleLogin} disabled={!isLoginFieldsFilled}>
+                    <Button fullWidth variant="contained" color="primary" sx={{ mt: 2, backgroundColor: '#1F1F1F'}} onClick={handleLogin} disabled={!isLoginFieldsFilled}>
                         Войти
                     </Button>
                 </Box>

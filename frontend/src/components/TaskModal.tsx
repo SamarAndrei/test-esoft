@@ -14,14 +14,17 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import { IUser } from "../models/IUser.ts";
 import {ITask} from "../models/ITask.ts";
+import {useSelector} from "react-redux";
+import {RootState} from "../store/store.ts";
 
 interface TaskModalProps {
     open: boolean;
     handleClose: () => void;
     taskData: ITask;
     setTaskData: (task: ITask) => void;
-    handleChangeCreate: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | { name?: string; value: unknown }>) => void;
+    handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | { name?: string; value: unknown }>) => void;
     handleSubmitCreate: () => void;
+    handleSubmitUpdate: () => void;
     users: IUser[];
     isValid: boolean;
     editingTask?: ITask | null;
@@ -32,12 +35,17 @@ const TaskModal: React.FC<TaskModalProps> = ({
      handleClose,
      taskData,
      setTaskData,
-     handleChangeCreate,
+     handleChange,
      handleSubmitCreate,
+     handleSubmitUpdate,
      users,
      isValid,
      editingTask
 }: TaskModalProps) => {
+
+    const store = useSelector((state: RootState) => state.user);
+    const isManager = store.role === 'Руководитель';
+
 
     useEffect(() => {
         if (editingTask) {
@@ -63,18 +71,19 @@ const TaskModal: React.FC<TaskModalProps> = ({
                 <Typography variant="h6" gutterBottom>{editingTask ? "Редактировать задачу" : "Создать задачу"}</Typography>
                 <TextField
                     fullWidth margin="normal" label="Название" name="title"
-                    value={taskData.title} onChange={handleChangeCreate} />
+                    value={taskData.title} onChange={handleChange} disabled={!isManager}/>
                 <TextField
                     fullWidth margin="normal" label="Описание" name="description"
-                    multiline rows={3} value={taskData.description} onChange={handleChangeCreate} />
+                    multiline rows={3} value={taskData.description} onChange={handleChange} disabled={!isManager}/>
                 <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
                     <InputLabel>Приоритет</InputLabel>
                     <Select
                         id="demo-select-small"
                         value={taskData.priority}
                         label="Priority"
-                        onChange={handleChangeCreate}
+                        onChange={handleChange}
                         name="priority"
+                        disabled={!isManager}
                     >
                         <MenuItem value={'высокий'}>высокий</MenuItem>
                         <MenuItem value={'средний'}>средний</MenuItem>
@@ -87,7 +96,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
                         id="demo-select-small"
                         value={taskData.status}
                         label="Status"
-                        onChange={handleChangeCreate}
+                        onChange={handleChange}
                         name="status"
                     >
                         <MenuItem value={'к выполнению'}>к выполнению</MenuItem>
@@ -103,8 +112,9 @@ const TaskModal: React.FC<TaskModalProps> = ({
                         id="demo-select-small"
                         value={taskData.assigneeId}
                         label="Ответственный"
-                        onChange={handleChangeCreate}
+                        onChange={handleChange}
                         name="assigneeId"
+                        disabled={!isManager}
                     >
                         {users.map((user: IUser) => (
                             <MenuItem key={user.id} value={user.id}>
@@ -115,8 +125,8 @@ const TaskModal: React.FC<TaskModalProps> = ({
                 </FormControl>
                 <TextField
                     fullWidth margin="normal" label="Дата окончания" name="due_date" type="date"
-                    InputLabelProps={{ shrink: true }} value={taskData.due_date} onChange={handleChangeCreate} />
-                <Button fullWidth variant="contained" color="primary" onClick={handleSubmitCreate} sx={{ mt: 2 }} disabled={!isValid}>
+                    InputLabelProps={{ shrink: true }} value={taskData.due_date.split("T")[0]} onChange={handleChange} disabled={!isManager}/>
+                <Button fullWidth variant="contained" color="primary" onClick={editingTask ? handleSubmitUpdate : handleSubmitCreate} sx={{ mt: 2, backgroundColor: '#1F1F1F' }} disabled={!isValid}>
                     {editingTask ? "Обновить" : "Создать"}
                 </Button>
             </Box>

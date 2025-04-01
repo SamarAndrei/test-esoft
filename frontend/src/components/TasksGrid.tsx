@@ -8,14 +8,19 @@ import { AxiosResponse } from "axios";
 import { ITask } from "../models/ITask.ts";
 import UserService from "../services/user.service.ts";
 import TaskModal from "./TaskModal.tsx";
+import {IUser} from "../models/IUser.ts";
+import useValidateCreateTaskdata from "../helpers/useValidateCreateTaskdata.ts";
 
 const TasksGrid = () => {
     const [grouping, setGrouping] = useState("");
     const [tasks, setTasks] = useState<ITask[]>([]);
-    const [users, setUsers] = useState<{ [id: string]: { firstName: string, lastName: string } }>({});
+    const [users, setUsers] = useState<IUser[]>([])
+    const [usersData, setUsersData] = useState<{ [key: string]: IUser }>({});
     const [open, setOpenModal] = useState(false);
     const [searchParams, setSearchParams] = useSearchParams();
     const [selectedTask, setSelectedTask] = useState<ITask | null>(null);
+    const [filteredSelectedTask, setFilteredSelectedTask] = useState({ title: '', description: '', priority: '', due_date: '', status: '', assigneeId: ''})
+    const { errors, isValid } = useValidateCreateTaskdata(filteredSelectedTask);
 
     const handleOpen = (task: ITask) => {
         setSelectedTask(task);
@@ -25,6 +30,33 @@ const TasksGrid = () => {
     const handleClose = () => {
         setOpenModal(false);
         setSelectedTask(null);
+    };
+
+    const handleChangeUpdate = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | { name?: string; value: unknown }>) => {
+        if (!selectedTask) return;
+        const {id, createdAt, updatedAt, creatorId, due_date, ...filteredSelectedTask} = selectedTask;
+        const formattedDueDate = new Date(due_date.split('T')[0]);
+        const finalTaskData = {
+            ...filteredSelectedTask,
+            due_date: formattedDueDate
+        };
+        setFilteredSelectedTask(finalTaskData)
+        if (isValid) {
+            if (e.target.name === 'due_date') {
+                setSelectedTask({...selectedTask, [e.target.name as string]: new Date(e.target.value).toISOString()});
+            } else {
+                setSelectedTask({...selectedTask, [e.target.name as string]: e.target.value});
+            }
+        }
+    };
+
+    const handleSubmitUpdate = async () => {
+        if (selectedTask) {
+            const { id, createdAt, updatedAt, creatorId, ...filteredSelectedTask } = selectedTask;
+            await TasksService.updateTask(selectedTask.id, filteredSelectedTask);
+            setOpenModal(false);
+            setSelectedTask(null);
+        }
     };
 
     useEffect(() => {
@@ -46,37 +78,25 @@ const TasksGrid = () => {
         };
 
         fetchTasks();
-    }, [searchParams]);
-
-    const getUserName = async (id: string) => {
-        try {
-            const res = await UserService.fetchUserById(id);
-            return { firstName: res.data.firstName, lastName: res.data.lastName };
-        } catch (e) {
-            console.error(e, "Ошибка запроса пользователей");
-        }
-    };
+    }, [searchParams, selectedTask]);
 
     useEffect(() => {
-        const fetchUserNames = async () => {
-            const usersData: { [id: string]: { firstName: string, lastName: string } } = {};
-
-            for (const task of tasks) {
-                if (!usersData[task.assigneeId]) {
-                    const userName = await getUserName(task.assigneeId);
-                    if (userName) {
-                        usersData[task.assigneeId] = userName;
-                    }
-                }
+        const fetchUsers = async () => {
+            try {
+                const res = await UserService.fetchUsers();
+                setUsers(res.data)
+                const usersMap = res.data.reduce((acc: { [key: string]: IUser }, user: IUser) => {
+                    acc[user.id] = user;
+                    return acc;
+                }, {});
+                setUsersData(usersMap);
+            } catch (e) {
+                console.error(e, "Ошибка запроса пользователей");
             }
-
-            setUsers((prevUsers) => ({ ...prevUsers, ...usersData }));
         };
-
-        if (tasks.length > 0) {
-            fetchUserNames();
-        }
+        fetchUsers();
     }, [tasks]);
+
 
     return (
         <Container sx={{ mt: 12 }}>
@@ -93,18 +113,26 @@ const TasksGrid = () => {
                                 <Typography variant="body2">Дата окончания: {task.due_date.split("T")[0]}</Typography>
                                 <Typography variant="body2">Статус: {task.status}</Typography>
                                 <Typography variant="body2">
-                                    Ответственный: {users[task.assigneeId] ? `${users[task.assigneeId].firstName} ${users[task.assigneeId].lastName}` : "Загрузка..."}
+                                    Ответственный: {usersData[task.assigneeId]
+                                    ? `${usersData[task.assigneeId].firstName} ${usersData[task.assigneeId].lastName}`
+                                    : "Загрузка..."}
                                 </Typography>
                             </Paper>
                         </Grid>
                     ))
                     : <Typography> У вас нет задач </Typography>}
-                {/*<TaskModal*/}
-                {/*    open={open}*/}
-                {/*    handleClose={handleClose}*/}
-                {/*    editingTask={selectedTask}*/}
-                {/*    users={users}*/}
-                {/*/>*/}
+                <TaskModal
+                    open={open}
+                    handleClose={handleClose}
+                    taskData={selectedTask}
+                    setTaskData={setSelectedTask}
+                    handleChange={handleChangeUpdate}
+                    handleSubmitCreate={() => {}}
+                    handleSubmitUpdate={handleSubmitUpdate}
+                    users={users}
+                    isValid={isValid}
+                    editingTask={selectedTask}
+                />
             </Grid>
         </Container>
     );

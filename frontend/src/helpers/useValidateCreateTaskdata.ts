@@ -9,7 +9,7 @@ const useValidateCreateTaskData = ({
                                        assigneeId
                                    }: {
     title: string;
-    description: string;
+    description?: string;
     priority: string;
     due_date: string;
     status: string;

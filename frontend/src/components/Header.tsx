@@ -3,7 +3,6 @@ import {
     AppBar,
     Box,
     Container,
-    IconButton,
     Toolbar,
     Typography,
     Link,
@@ -18,11 +17,11 @@ const Header = React.memo(() => {
     return (
         <header>
             <Box sx={{flexGrow: 1}}>
-                <AppBar position="fixed">
+                <AppBar position="fixed" sx={{ backgroundColor: '#1F1F1F' }}>
                     <Container fixed>
                         <Toolbar sx={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
                             <Link href="/" color="inherit" underline="none">
-                                <Typography variant="h6">TODO list</Typography>
+                                <Typography variant="h6" >TODO list</Typography>
                             </Link>
 
                             {store!.isLoading === false ? (

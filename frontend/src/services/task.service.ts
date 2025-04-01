@@ -26,9 +26,16 @@ export default class TasksService {
 
     static async updateTask(
         task_id: string,
-        status: string,
+        taskData: {
+            title: string;
+            priority: string;
+            due_date: string;
+            status: string;
+            assigneeId: string;
+            description?: string;
+        }
     ): Promise<AxiosResponse> {
-        return $api.post(`/task/${task_id}`, {status});
+        return $api.patch(`/task/${task_id}`, taskData);
     }
 
     static async getAllTask(q: TSortParam): Promise<AxiosResponse<ITask[]>> {

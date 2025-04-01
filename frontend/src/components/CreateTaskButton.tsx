@@ -19,13 +19,12 @@ const CreateTaskButton = () => {
         setOpen(false);
         setTaskData({ title: '', description: '', priority: '', due_date: '', status: '', assigneeId: ''})
     };
-    const handleChangeCreate = (e) => {
+    const handleChange = (e) => {
         setTaskData({ ...taskData, [e.target.name]: e.target.value });
     };
 
     const handleSubmitCreate = async () => {
         const updatedTaskData = { ...taskData, due_date: new Date(taskData.due_date).toISOString() };
-
         if (isValid) {
             await TasksService.createTask(updatedTaskData)
             handleClose();
@@ -40,7 +39,7 @@ const CreateTaskButton = () => {
 
     return (
         <Box mr={1}>
-            <Button variant="contained" color="secondary" onClick={handleOpen}>
+            <Button variant="contained" color="secondary" onClick={handleOpen} sx={{ backgroundColor: '#97C2EC' }}>
                 Создать задачу
             </Button>
             <TaskModal
@@ -48,10 +47,12 @@ const CreateTaskButton = () => {
                 handleClose={handleClose}
                 taskData={taskData}
                 setTaskData={setTaskData}
-                handleChangeCreate={handleChangeCreate}
+                handleChange={handleChange}
                 handleSubmitCreate={handleSubmitCreate}
+                handleSubmitUpdate={() => {}}
                 users={users}
                 isValid={isValid}
+                editingTask={null}
             />
         </Box>
     );
