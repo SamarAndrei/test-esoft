@@ -1,6 +1,6 @@
 import express from 'express';
 import {body} from "express-validator";
-import UserController from 'controllers/user.controller';
+import UserController from '../controllers/user.controller';
 import {authorizeRole} from "../middleware/role.middleware";
 import {authenticateJWT} from "../middleware/auth.middleware";
 

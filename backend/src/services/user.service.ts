@@ -1,6 +1,6 @@
 import {v7} from "uuid";
 import bcrypt from "bcrypt";
-import UserModel from 'reposio/user.dal';
+import UserModel from '../reposio/user.dal';
 import TokenService from "./token.service";
 import {ILoginData} from "../interfaces/ILoginData";
 import {ApiError} from '../exceptions/api_errors';
