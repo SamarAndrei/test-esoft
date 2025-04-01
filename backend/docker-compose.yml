@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  app:
+    container_name: esoft-app
+    build:
+      context: .
+    env_file:
+      - .env
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: [ "sh", "-c", "npm run migrate:build && npm run seed:build && npm run start" ]
+    restart: always
+
+  postgres:
+    container_name: postgres_esoft
+    image: postgres
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 10s
+      retries: 5
+      start_period: 10s
+
+volumes:
+  pgdata:

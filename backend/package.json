@@ -8,8 +8,11 @@
     "build": "tsc",
     "start": "node build/index.js",
     "migrate": "knex migrate:latest --knexfile=src/knexfile.ts",
-    "seed": "knex seed:run --specific=users_test.ts --knexfile=src/knexfile.ts && knex seed:run --specific=leader_user.ts --knexfile=src/knexfile.ts && knex seed:run --specific=tasks_test.ts --knexfile=src/knexfile.ts"
-  },
+    "seed": "knex seed:run --specific=users_test.ts --knexfile=src/knexfile.ts && knex seed:run --specific=leader_user.ts --knexfile=src/knexfile.ts && knex seed:run --specific=tasks_test.ts --knexfile=src/knexfile.ts",
+    "migrate:build": "knex migrate:latest --knexfile=build/knexfile.js",
+    "seed:build": "knex seed:run --specific=users_test.js --knexfile=build/knexfile.js && knex seed:run --specific=leader_user.js --knexfile=build/knexfile.js && knex seed:run --specific=tasks_test.js --knexfile=build/knexfile.js"
+
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
