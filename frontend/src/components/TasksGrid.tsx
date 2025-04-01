@@ -10,6 +10,7 @@ import UserService from "../services/user.service.ts";
 import TaskModal from "./TaskModal.tsx";
 import {IUser} from "../models/IUser.ts";
 import useValidateCreateTaskdata from "../helpers/useValidateCreateTaskdata.ts";
+import Spinner from "./Spinner.tsx";
 
 const TasksGrid = () => {
     const [grouping, setGrouping] = useState("");
@@ -119,7 +120,7 @@ const TasksGrid = () => {
                                 <Typography variant="body2">
                                     Ответственный: {usersData[task.assigneeId]
                                     ? `${usersData[task.assigneeId].firstName} ${usersData[task.assigneeId].lastName}`
-                                    : "Загрузка..."}
+                                    : <Spinner/>}
                                 </Typography>
                             </Paper>
                         </Grid>
