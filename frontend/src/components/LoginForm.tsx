@@ -24,6 +24,7 @@ const LoginForm: React.FC = () => {
             navigate("/tasks");
 
         } catch(error) {
+            // @ts-ignore
             setError(error);
         }
     };

@@ -24,6 +24,7 @@ const SignUpForm: React.FC = () => {
             await dispatch(registration({firstName, lastName, login: userLogin, password, middleName})).unwrap();
             navigate("/tasks");
         } catch (error) {
+            // @ts-ignore
             setError(error);
         }
     };

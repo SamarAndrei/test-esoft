@@ -27,7 +27,7 @@ const useValidateCreateTaskData = ({
             newErrors.title = 'Заголовок задачи обязателен и не должен превышать 255 символов';
         }
 
-        if (description.length > 1000) {
+        if (description!.length > 1000) {
             newErrors.description = 'Описание задачи не должно превышать 1000 символов';
         }
 

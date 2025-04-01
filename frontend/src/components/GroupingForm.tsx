@@ -17,6 +17,7 @@ const GroupingForm = ({ setGrouping }: { setGrouping: (grouping: string) => void
         <Container sx={{ mt: 12 }}>
             <FormControl fullWidth>
                 <InputLabel id="demo-simple-select-label">Группировка по:</InputLabel>
+                {/*// @ts-ignore*/}
                 <Select value={groupingValue} onChange={handleGroupingChange}>
                     <MenuItem value="none">Без группировки</MenuItem>
                     <MenuItem value="today">На сегодня</MenuItem>

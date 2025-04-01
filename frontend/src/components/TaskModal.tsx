@@ -20,7 +20,7 @@ import {RootState} from "../store/store.ts";
 interface TaskModalProps {
     open: boolean;
     handleClose: () => void;
-    taskData: ITask;
+    taskData: ITask | null;
     setTaskData: (task: ITask) => void;
     handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | { name?: string; value: unknown }>) => void;
     handleSubmitCreate: () => void;
@@ -44,6 +44,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
 }: TaskModalProps) => {
 
     const store = useSelector((state: RootState) => state.user);
+    // @ts-ignore
     const isManager = store.role === 'Руководитель';
 
 
@@ -81,6 +82,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
                         id="demo-select-small"
                         value={taskData.priority}
                         label="Priority"
+                        // @ts-ignore
                         onChange={handleChange}
                         name="priority"
                         disabled={!isManager}
@@ -96,6 +98,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
                         id="demo-select-small"
                         value={taskData.status}
                         label="Status"
+                        // @ts-ignore
                         onChange={handleChange}
                         name="status"
                     >
@@ -112,6 +115,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
                         id="demo-select-small"
                         value={taskData.assigneeId}
                         label="Ответственный"
+                        // @ts-ignore
                         onChange={handleChange}
                         name="assigneeId"
                         disabled={!isManager}

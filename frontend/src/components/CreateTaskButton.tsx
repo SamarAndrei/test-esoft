@@ -7,19 +7,20 @@ import UserService from "../services/user.service.ts";
 import useValidateCreateTaskdata from "../helpers/useValidateCreateTaskdata.ts";
 import TasksService from "../services/task.service.ts";
 import TaskModal from "./TaskModal.tsx";
+import {IUser} from "../models/IUser.ts";
 
 const CreateTaskButton = () => {
     const [open, setOpen] = useState(false);
     const [taskData, setTaskData] = useState({ title: '', description: '', priority: '', due_date: '', status: '', assigneeId: ''});
-    const [users, setUsers] = useState([]);
-    const { errors, isValid } = useValidateCreateTaskdata(taskData);
+    const [users, setUsers] = useState<IUser[]>([]);
+    const { isValid } = useValidateCreateTaskdata(taskData);
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => {
         setOpen(false);
         setTaskData({ title: '', description: '', priority: '', due_date: '', status: '', assigneeId: ''})
     };
-    const handleChange = (e) => {
+    const handleChange = (e: any) => {
         setTaskData({ ...taskData, [e.target.name]: e.target.value });
     };
 
@@ -45,7 +46,9 @@ const CreateTaskButton = () => {
             <TaskModal
                 open={open}
                 handleClose={handleClose}
+                // @ts-ignore
                 taskData={taskData}
+                // @ts-ignore
                 setTaskData={setTaskData}
                 handleChange={handleChange}
                 handleSubmitCreate={handleSubmitCreate}

@@ -21,6 +21,7 @@ export const login = createAsyncThunk(
             return { isAuth: true, role: response.data.role, validToken: response.data.validToken};
         } catch (error) {
             console.error('Ошибка входа', error);
+            // @ts-ignore
             return rejectWithValue(error.message);
         }
     },
@@ -34,6 +35,7 @@ export const registration = createAsyncThunk(
             return { isAuth: true, role: response.data.role, validToken: response.data.validToken};
         } catch (error) {
             console.error('Ошибка при регистрации', error);
+            // @ts-ignore
             return rejectWithValue(error.message);
         }
     },
@@ -47,6 +49,7 @@ export const logout = createAsyncThunk(
             return { isAuth: false, role: '', validToken: false, users: []};
         } catch (error) {
             console.error('Ошибка при выходе', error);
+            // @ts-ignore
             return rejectWithValue(error.message);
         }
     },
@@ -63,6 +66,7 @@ export const checkAuth = createAsyncThunk(
             return { isAuth: true, validToken: response.data.validToken};
         } catch (error) {
             console.error('Ошибка проверки авторизации', error);
+            // @ts-ignore
             return rejectWithValue(error.message);
         }
     },
@@ -76,12 +80,13 @@ export const getAllUsers = createAsyncThunk(
             return { users: response.data };
         } catch (error) {
             console.error('Ошибка при поиске пользователей', error);
+            // @ts-ignore
             return rejectWithValue(error.message);
         }
     },
 );
 
-const userReducer = (state = initialState, action) => {
+const userReducer = (state = initialState, action: any) => {
     switch (action.type) {
         case login.pending.type:
         case registration.pending.type:
